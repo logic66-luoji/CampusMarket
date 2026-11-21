@@ -13,3 +13,11 @@ venv/
 build/pages/
 build/body.pdf
 build/cover.pdf
+
+# video assembly intermediates (frames kept locally)
+presentation/video/frames/
+
+# build QA probes
+build/probe_*.png
+build/vis_test.png
+build/concat.txt
