@@ -1,0 +1,10 @@
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.streamlit/
+*.log
+.DS_Store
+
+# database/campus_market.db 刻意不忽略：
+# 它含 A 同学造的 10,000 行 products，是报告 §6 索引实验与演示数据的基准快照。

@@ -1,0 +1,257 @@
+{
+ "generated_at": "2026-11-21T07:30:57.056476+00:00",
+ "rounds": 10,
+ "all_exactly_one_winner": true,
+ "runs": [
+  {
+   "round": 1,
+   "product_id": 10001,
+   "winner_buyer_id": 3,
+   "loser_buyer_id": 2,
+   "success_count": 1,
+   "failure_count": 1,
+   "final_status": "sold",
+   "final_buyer_id": 3,
+   "finished_at": "2026-11-21 15:30:56",
+   "attempts": [
+    {
+     "buyer_id": 2,
+     "message": "错误：该商品已被别人抢先买走！",
+     "elapsed_ms": 13.545,
+     "exception": null
+    },
+    {
+     "buyer_id": 3,
+     "message": "购买成功！",
+     "elapsed_ms": 8.173,
+     "exception": null
+    }
+   ]
+  },
+  {
+   "round": 2,
+   "product_id": 10002,
+   "winner_buyer_id": 3,
+   "loser_buyer_id": 2,
+   "success_count": 1,
+   "failure_count": 1,
+   "final_status": "sold",
+   "final_buyer_id": 3,
+   "finished_at": "2026-11-21 15:30:56",
+   "attempts": [
+    {
+     "buyer_id": 2,
+     "message": "错误：该商品已被别人抢先买走！",
+     "elapsed_ms": 13.953,
+     "exception": null
+    },
+    {
+     "buyer_id": 3,
+     "message": "购买成功！",
+     "elapsed_ms": 11.557,
+     "exception": null
+    }
+   ]
+  },
+  {
+   "round": 3,
+   "product_id": 10003,
+   "winner_buyer_id": 2,
+   "loser_buyer_id": 3,
+   "success_count": 1,
+   "failure_count": 1,
+   "final_status": "sold",
+   "final_buyer_id": 2,
+   "finished_at": "2026-11-21 15:30:56",
+   "attempts": [
+    {
+     "buyer_id": 2,
+     "message": "购买成功！",
+     "elapsed_ms": 11.315,
+     "exception": null
+    },
+    {
+     "buyer_id": 3,
+     "message": "错误：该商品已被别人抢先买走！",
+     "elapsed_ms": 13.158,
+     "exception": null
+    }
+   ]
+  },
+  {
+   "round": 4,
+   "product_id": 10004,
+   "winner_buyer_id": 3,
+   "loser_buyer_id": 2,
+   "success_count": 1,
+   "failure_count": 1,
+   "final_status": "sold",
+   "final_buyer_id": 3,
+   "finished_at": "2026-11-21 15:30:56",
+   "attempts": [
+    {
+     "buyer_id": 2,
+     "message": "错误：该商品已被别人抢先买走！",
+     "elapsed_ms": 21.17,
+     "exception": null
+    },
+    {
+     "buyer_id": 3,
+     "message": "购买成功！",
+     "elapsed_ms": 10.615,
+     "exception": null
+    }
+   ]
+  },
+  {
+   "round": 5,
+   "product_id": 10005,
+   "winner_buyer_id": 3,
+   "loser_buyer_id": 2,
+   "success_count": 1,
+   "failure_count": 1,
+   "final_status": "sold",
+   "final_buyer_id": 3,
+   "finished_at": "2026-11-21 15:30:56",
+   "attempts": [
+    {
+     "buyer_id": 2,
+     "message": "错误：该商品已被别人抢先买走！",
+     "elapsed_ms": 13.199,
+     "exception": null
+    },
+    {
+     "buyer_id": 3,
+     "message": "购买成功！",
+     "elapsed_ms": 11.553,
+     "exception": null
+    }
+   ]
+  },
+  {
+   "round": 6,
+   "product_id": 10006,
+   "winner_buyer_id": 3,
+   "loser_buyer_id": 2,
+   "success_count": 1,
+   "failure_count": 1,
+   "final_status": "sold",
+   "final_buyer_id": 3,
+   "finished_at": "2026-11-21 15:30:56",
+   "attempts": [
+    {
+     "buyer_id": 2,
+     "message": "错误：该商品已被别人抢先买走！",
+     "elapsed_ms": 12.858,
+     "exception": null
+    },
+    {
+     "buyer_id": 3,
+     "message": "购买成功！",
+     "elapsed_ms": 10.472,
+     "exception": null
+    }
+   ]
+  },
+  {
+   "round": 7,
+   "product_id": 10007,
+   "winner_buyer_id": 3,
+   "loser_buyer_id": 2,
+   "success_count": 1,
+   "failure_count": 1,
+   "final_status": "sold",
+   "final_buyer_id": 3,
+   "finished_at": "2026-11-21 15:30:56",
+   "attempts": [
+    {
+     "buyer_id": 2,
+     "message": "错误：该商品已被别人抢先买走！",
+     "elapsed_ms": 10.474,
+     "exception": null
+    },
+    {
+     "buyer_id": 3,
+     "message": "购买成功！",
+     "elapsed_ms": 9.71,
+     "exception": null
+    }
+   ]
+  },
+  {
+   "round": 8,
+   "product_id": 10008,
+   "winner_buyer_id": 3,
+   "loser_buyer_id": 2,
+   "success_count": 1,
+   "failure_count": 1,
+   "final_status": "sold",
+   "final_buyer_id": 3,
+   "finished_at": "2026-11-21 15:30:56",
+   "attempts": [
+    {
+     "buyer_id": 2,
+     "message": "错误：该商品已被别人抢先买走！",
+     "elapsed_ms": 19.924,
+     "exception": null
+    },
+    {
+     "buyer_id": 3,
+     "message": "购买成功！",
+     "elapsed_ms": 10.929,
+     "exception": null
+    }
+   ]
+  },
+  {
+   "round": 9,
+   "product_id": 10009,
+   "winner_buyer_id": 3,
+   "loser_buyer_id": 2,
+   "success_count": 1,
+   "failure_count": 1,
+   "final_status": "sold",
+   "final_buyer_id": 3,
+   "finished_at": "2026-11-21 15:30:56",
+   "attempts": [
+    {
+     "buyer_id": 2,
+     "message": "错误：该商品已被别人抢先买走！",
+     "elapsed_ms": 13.46,
+     "exception": null
+    },
+    {
+     "buyer_id": 3,
+     "message": "购买成功！",
+     "elapsed_ms": 9.636,
+     "exception": null
+    }
+   ]
+  },
+  {
+   "round": 10,
+   "product_id": 10010,
+   "winner_buyer_id": 3,
+   "loser_buyer_id": 2,
+   "success_count": 1,
+   "failure_count": 1,
+   "final_status": "sold",
+   "final_buyer_id": 3,
+   "finished_at": "2026-11-21 15:30:57",
+   "attempts": [
+    {
+     "buyer_id": 2,
+     "message": "错误：该商品已被别人抢先买走！",
+     "elapsed_ms": 11.894,
+     "exception": null
+    },
+    {
+     "buyer_id": 3,
+     "message": "购买成功！",
+     "elapsed_ms": 8.305,
+     "exception": null
+    }
+   ]
+  }
+ ]
+}
