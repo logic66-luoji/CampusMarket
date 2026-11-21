@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1330" viewBox="0 0 1600 1330" font-family="Segoe UI, Microsoft YaHei, sans-serif">
   <rect x="0" y="0" width="1600" height="1330" fill="#ffffff"/>
-  <text x="800" y="52" text-anchor="middle" font-size="30" font-weight="700" fill="#1a202c">Figure 2 — Buyer Transaction Workflow (purchase is one conditional UPDATE)</text>
+  <text x="800" y="52" text-anchor="middle" font-size="30" font-weight="700" fill="#1a202c">Figure 3 — Buyer Transaction Workflow (purchase is one conditional UPDATE)</text>
   <text x="800" y="80" text-anchor="middle" font-size="16" fill="#4a5568">exactly-one-winner guarantee comes from the database, not the interface</text>
 
   <defs>

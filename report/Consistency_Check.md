@@ -1,5 +1,21 @@
 # Final Report — Consistency Check Log (Member C, 2026-11-21)
 
+> **2026-11-21 restructure (v2):** the report was rewritten to the course's
+> official submission outline (Group Information / Contribution Statement /
+> Project Overview / Technical Design / Database Design / Evaluation and
+> Results / Challenges and Lessons Learned / References / Links to
+> Deliverables) in a condensed form. Member attributions now appear only in
+> the Contribution Statement. New items required by the official template
+> were added: **ER diagram** (Figure 2, drawn as SVG + PNG), **normalization
+> level** (3NF, §5.3), and **sample queries** (§5.6). The buyer-workflow
+> figure was renumbered to Figure 3. Undergraduate majors were restored and
+> filled (A: Financial Mathematics; B: Economics; C: Communication
+> Engineering). The PDF is delivered under the official-style name
+> `CampusMarket-report.pdf`; `Final_Report.md` remains the editable source,
+> and all nine `Section*.md` files mirror it. Sections 3/4 are condensed
+> versions of B's original draft (full text preserved in git history and in
+> the original `section3&4.md`).
+
 Task 5 requires the consolidated report to be internally consistent with the
 delivered code. This log records every check performed and every editorial
 change made during consolidation, so teammates can review and object before
