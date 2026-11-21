@@ -40,7 +40,7 @@ submission.
 | Section 5 Database Design | A | §5 "[TO BE PROVIDED BY MEMBER A]" with agreed outline |
 | Section 6 Evaluation and Results | A | §6 "[TO BE PROVIDED BY MEMBER A]" with agreed outline |
 | Figures 1 & 2 export | B | `report/figures/` |
-| GitHub repository URL | Group | §9.1 |
+| GitHub repository URL → **DONE 2026-11-21**: https://github.com/logic66-luoji/CampusMarket (private) | ~~Group~~ | §9.1 filled |
 | Demonstration video URL | Group | §9.2 |
 | Final PDF/DOCX export | C (mechanical) | after A's sections arrive |
 

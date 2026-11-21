@@ -6,7 +6,8 @@ video of 5–8 minutes recorded against the running application.
 
 ## 9.1 Source Code Repository
 
-- GitHub repository: [Insert repository URL]
+- GitHub repository: https://github.com/logic66-luoji/CampusMarket (private;
+  access to be granted to the course instructor)
 
   The repository contains the complete application (`app.py`, `pages/`,
   `services/`, `repositories/`), the SQLite database and schema
@@ -37,6 +38,5 @@ video of 5–8 minutes recorded against the running application.
 | Report source sections and consolidated report | `report/` |
 | Video script and demonstration checklist | `presentation/` |
 
-> Note: The two URLs above are placeholders. They are to be replaced with the
-> final repository and video links by the group before submission; no URLs
-> have been fabricated.
+> Note: the repository URL above is final. The video URL remains a
+> placeholder until the recording is uploaded; no URLs have been fabricated.
