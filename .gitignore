@@ -21,3 +21,10 @@ presentation/video/frames/
 build/probe_*.png
 build/vis_test.png
 build/concat.txt
+
+# recording QA intermediates
+build/*.png
+build/*.log
+build/*.mp4
+build/*.txt
+rec_analysis/
