@@ -23,8 +23,9 @@ submission.
 ## 2. Editorial changes made to B's Sections 3–4 (only these)
 
 1. **Figure paths**: `C:\Users\25431\...\Figure1/2….png` (author-local paths)
-   → `report/figures/Figure1/2…png` with a placeholder note. Figures
-   themselves are pending export by B.
+   → `report/figures/Figure1/2…png`. The figures themselves were later drawn
+   by Member C (2026-11-21) as SVG + PNG exports matching B's stated figure
+   titles and content scope.
 2. **§4.6 project tree**: extended with `tests/` and C's `docs/C_*.md`
    entries so the reported structure equals the delivered structure. No
    wording of B's prose was changed.
@@ -36,13 +37,24 @@ submission.
 | Pending item | Owner | Placeholder location |
 | --- | --- | --- |
 | ~~Member names~~ → **DONE 2026-11-21**: A. Wang Fangcheng 72640065; B. Cai Haoneng 72640692; C. Li Jijia 72640201 | ~~Group~~ | §1.1 filled |
-| Undergraduate majors | Group | §1.1 (only remaining §1 placeholder) |
-| Section 5 Database Design | A | §5 "[TO BE PROVIDED BY MEMBER A]" with agreed outline |
-| Section 6 Evaluation and Results | A | §6 "[TO BE PROVIDED BY MEMBER A]" with agreed outline |
-| Figures 1 & 2 export | B | `report/figures/` |
+| ~~Undergraduate majors~~ → **REMOVED by group decision (2026-11-21)**: Section 1 lists name + student ID only | ~~Group~~ | §1.1 |
+| ~~Section 5 Database Design~~ → **DONE 2026-11-21**: drafted by C from A's delivered `schema.sql` / DB audit, group-approved arrangement | ~~A~~ | §5 filled, drafting note included |
+| ~~Section 6 Evaluation and Results~~ → **DONE 2026-11-21**: drafted by C from A's `performance_test.py` + real benchmark runs (see below) | ~~A~~ | §6 filled, drafting note included |
+| ~~Figures 1 & 2~~ → **DONE 2026-11-21**: drawn by C (SVG source + PNG export in `report/figures/`) | ~~B~~ | `report/figures/` |
 | GitHub repository URL → **DONE 2026-11-21**: https://github.com/logic66-luoji/CampusMarket (private) | ~~Group~~ | §9.1 filled |
-| Demonstration video URL | Group | §9.2 |
-| Final PDF/DOCX export | C (mechanical) | after A's sections arrive |
+| Demonstration video URL | Group | §9.2 (only remaining placeholder) |
+| ~~Final PDF export~~ → done after Sections 5/6 landed (see `report/Final_Report.pdf`) | C | — |
+
+### §6 measurement provenance (for the drafting note above)
+
+All §6 numbers come from real runs on 2026-11-21 against the delivered
+database opened read-only: `EXPLAIN QUERY PLAN` for both plans; 500-iteration
+`SELECT *` benchmark (1.52 vs 1.72 ms at 10k rows; 24.80 vs 28.67 ms at
+110k rows); covering-index `COUNT(*)` benchmark (0.038 vs 0.313 ms at 10k
+rows = 8.2×; 0.235 vs 3.021 ms at 110k rows = 12.8×). The 110k-row
+experiment used a temporary copy of the database (10 additional copies of
+the products table), deleted afterwards; the baseline file was hash-verified
+untouched.
 
 ## 4. Terminology decisions (uniform across all sections)
 

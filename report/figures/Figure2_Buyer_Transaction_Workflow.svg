@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1330" viewBox="0 0 1600 1330" font-family="Segoe UI, Microsoft YaHei, sans-serif">
+  <rect x="0" y="0" width="1600" height="1330" fill="#ffffff"/>
+  <text x="800" y="52" text-anchor="middle" font-size="30" font-weight="700" fill="#1a202c">Figure 2 — Buyer Transaction Workflow (purchase is one conditional UPDATE)</text>
+  <text x="800" y="80" text-anchor="middle" font-size="16" fill="#4a5568">exactly-one-winner guarantee comes from the database, not the interface</text>
+
+  <defs>
+    <marker id="a2" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#1a202c"/>
+    </marker>
+  </defs>
+
+  <!-- 1. start -->
+  <rect x="520" y="110" width="560" height="62" rx="31" fill="#2B6CB0"/>
+  <text x="800" y="148" text-anchor="middle" font-size="18" fill="#ffffff" font-weight="600">Buyer selects a test account (sidebar session state)</text>
+  <line x1="800" y1="172" x2="800" y2="212" stroke="#1a202c" stroke-width="2.5" marker-end="url(#a2)"/>
+
+  <!-- 2. browse -->
+  <rect x="480" y="216" width="640" height="62" rx="8" fill="#EAF2FB" stroke="#2B6CB0" stroke-width="2"/>
+  <text x="800" y="254" text-anchor="middle" font-size="17" fill="#1a202c">Browse marketplace: keyword / category / price filters — only status = 'available'</text>
+  <line x1="800" y1="278" x2="800" y2="318" stroke="#1a202c" stroke-width="2.5" marker-end="url(#a2)"/>
+
+  <!-- 3. detail -->
+  <rect x="560" y="322" width="480" height="62" rx="8" fill="#EAF2FB" stroke="#2B6CB0" stroke-width="2"/>
+  <text x="800" y="360" text-anchor="middle" font-size="17" fill="#1a202c">Open product detail page and click Purchase</text>
+  <line x1="800" y1="384" x2="800" y2="424" stroke="#1a202c" stroke-width="2.5" marker-end="url(#a2)"/>
+
+  <!-- 4. diamond: available? -->
+  <polygon points="800,428 1000,505 800,582 600,505" fill="#FFF9E6" stroke="#B7791F" stroke-width="2"/>
+  <text x="800" y="500" text-anchor="middle" font-size="17" fill="#1a202c">product row</text>
+  <text x="800" y="524" text-anchor="middle" font-size="17" fill="#1a202c">status = 'available' ?</text>
+  <!-- no branch (right) -->
+  <line x1="1000" y1="505" x2="1128" y2="505" stroke="#C53030" stroke-width="2.5" marker-end="url(#a2)"/>
+  <text x="1064" y="492" text-anchor="middle" font-size="15" fill="#C53030">No (sold)</text>
+  <rect x="1132" y="470" width="420" height="70" rx="8" fill="#FDECEC" stroke="#C53030" stroke-width="2"/>
+  <text x="1342" y="500" text-anchor="middle" font-size="16" fill="#C53030" font-weight="600">Show sold info: buyer #, finished_at</text>
+  <text x="1342" y="524" text-anchor="middle" font-size="16" fill="#C53030">no purchase button is rendered</text>
+  <line x1="800" y1="582" x2="800" y2="622" stroke="#1a202c" stroke-width="2.5" marker-end="url(#a2)"/>
+  <text x="812" y="610" font-size="15" fill="#2F855A">Yes</text>
+
+  <!-- 5. diamond: own product? -->
+  <polygon points="800,626 1000,703 800,780 600,703" fill="#FFF9E6" stroke="#B7791F" stroke-width="2"/>
+  <text x="800" y="698" text-anchor="middle" font-size="17" fill="#1a202c">buyer == seller_id ?</text>
+  <text x="800" y="722" text-anchor="middle" font-size="15" fill="#4a5568">(pre-check in buy_product)</text>
+  <line x1="1000" y1="703" x2="1128" y2="703" stroke="#C53030" stroke-width="2.5" marker-end="url(#a2)"/>
+  <text x="1064" y="690" text-anchor="middle" font-size="15" fill="#C53030">Yes</text>
+  <rect x="1132" y="668" width="420" height="70" rx="8" fill="#FDECEC" stroke="#C53030" stroke-width="2"/>
+  <text x="1342" y="698" text-anchor="middle" font-size="16" fill="#C53030" font-weight="600">Reject: 「不能购买自己发布的商品！」</text>
+  <text x="1342" y="722" text-anchor="middle" font-size="15" fill="#C53030">row unchanged</text>
+  <line x1="800" y1="780" x2="800" y2="820" stroke="#1a202c" stroke-width="2.5" marker-end="url(#a2)"/>
+  <text x="812" y="808" font-size="15" fill="#2F855A">No</text>
+
+  <!-- 6. conditional UPDATE -->
+  <rect x="430" y="824" width="740" height="118" rx="8" fill="#F3E8FF" stroke="#6B46C1" stroke-width="2.5"/>
+  <text x="800" y="856" text-anchor="middle" font-size="16" fill="#6B46C1" font-weight="700">SINGLE TRANSACTION — atomic conditional UPDATE</text>
+  <text x="800" y="886" text-anchor="middle" font-size="16" fill="#1a202c" font-family="Consolas, monospace">UPDATE products SET buyer_id = ?, status = 'sold', finished_at = ?</text>
+  <text x="800" y="912" text-anchor="middle" font-size="16" fill="#1a202c" font-family="Consolas, monospace">WHERE product_id = ? AND status = 'available'</text>
+  <text x="800" y="934" text-anchor="middle" font-size="14" fill="#4a5568">outcome decided by the affected-row count, never by the code path</text>
+  <line x1="800" y1="942" x2="800" y2="982" stroke="#1a202c" stroke-width="2.5" marker-end="url(#a2)"/>
+
+  <!-- 7. diamond: rowcount == 1 ? -->
+  <polygon points="800,986 1000,1063 800,1140 600,1063" fill="#FFF9E6" stroke="#B7791F" stroke-width="2"/>
+  <text x="800" y="1058" text-anchor="middle" font-size="17" fill="#1a202c">UPDATE rowcount == 1 ?</text>
+  <line x1="1000" y1="1063" x2="1128" y2="1063" stroke="#C53030" stroke-width="2.5" marker-end="url(#a2)"/>
+  <text x="1064" y="1050" text-anchor="middle" font-size="15" fill="#C53030">0 rows</text>
+  <rect x="1132" y="1028" width="420" height="70" rx="8" fill="#FDECEC" stroke="#C53030" stroke-width="2"/>
+  <text x="1342" y="1058" text-anchor="middle" font-size="16" fill="#C53030" font-weight="600">Reject: 「该商品已被别人抢先买走！」</text>
+  <text x="1342" y="1082" text-anchor="middle" font-size="15" fill="#C53030">loser of a concurrent race — nothing written</text>
+
+  <!-- concurrency annotation -->
+  <rect x="1140" y="1150" width="412" height="118" rx="8" fill="#EBF8FF" stroke="#2B6CB0" stroke-width="1.5" stroke-dasharray="6 4"/>
+  <text x="1346" y="1180" text-anchor="middle" font-size="15" fill="#2B6CB0" font-weight="700">Concurrent buyers (Test 2.5)</text>
+  <text x="1346" y="1204" text-anchor="middle" font-size="14" fill="#2B6CB0">two threads race on one product: SQLite write lock</text>
+  <text x="1346" y="1224" text-anchor="middle" font-size="14" fill="#2B6CB0">serializes the UPDATEs; loser re-evaluates WHERE</text>
+  <text x="1346" y="1244" text-anchor="middle" font-size="14" fill="#2B6CB0">against committed state — 10/10 rounds: exactly 1 winner</text>
+  <line x1="1342" y1="1098" x2="1346" y2="1150" stroke="#2B6CB0" stroke-width="1.5" stroke-dasharray="6 4"/>
+
+  <!-- success path -->
+  <line x1="800" y1="1140" x2="800" y2="1180" stroke="#1a202c" stroke-width="2.5" marker-end="url(#a2)"/>
+  <text x="812" y="1168" font-size="15" fill="#2F855A">1 row</text>
+  <rect x="490" y="1184" width="620" height="62" rx="8" fill="#E9F7EF" stroke="#2F855A" stroke-width="2"/>
+  <text x="800" y="1222" text-anchor="middle" font-size="17" fill="#1a202c">Purchase recorded: buyer_id · status='sold' · finished_at written</text>
+  <line x1="800" y1="1246" x2="800" y2="1286" stroke="#1a202c" stroke-width="2.5" marker-end="url(#a2)"/>
+  <rect x="490" y="1290" width="620" height="0" fill="none"/>
+  <rect x="490" y="1290" width="620" height="30" rx="15" fill="#2F855A"/>
+  <text x="800" y="1311" text-anchor="middle" font-size="16" fill="#ffffff" font-weight="600">Redirect to My Purchases — record shown, sold detail reachable</text>
+</svg>

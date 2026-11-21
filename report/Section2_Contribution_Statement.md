@@ -63,6 +63,8 @@ completed and delivered.
   `docs/C_Integration_Report.md`).
 - Documented challenges and lessons learned; compiled and verified the
   reference list; organized deliverable links.
+- Drafted Sections 5 and 6 of the final report from Member A's delivered
+  database artifacts and measured results, and drew the two report figures.
 - Integrated the final report (Sections 1, 2, 7, 8, 9 and the consistency
   check across all sections) and prepared the demonstration video script and
   checklist.

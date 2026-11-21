@@ -1,0 +1,91 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1060" viewBox="0 0 1600 1060" font-family="Segoe UI, Microsoft YaHei, sans-serif">
+  <rect x="0" y="0" width="1600" height="1060" fill="#ffffff"/>
+  <text x="800" y="52" text-anchor="middle" font-size="30" font-weight="700" fill="#1a202c">Figure 1 — CampusMarket Three-Layer Architecture</text>
+  <text x="800" y="80" text-anchor="middle" font-size="16" fill="#4a5568">Streamlit presentation · Python services · SQL-only repositories · SQLite</text>
+
+  <!-- Presentation layer -->
+  <rect x="40" y="110" width="1520" height="200" rx="14" fill="#EAF2FB" stroke="#2B6CB0" stroke-width="2"/>
+  <text x="64" y="142" font-size="18" font-weight="700" fill="#2B6CB0">PRESENTATION LAYER — Streamlit pages (no SQL, no DB connections)</text>
+  <g font-size="16" text-anchor="middle">
+    <rect x="70"  y="160" width="280" height="80" rx="8" fill="#ffffff" stroke="#2B6CB0"/>
+    <text x="210" y="192" font-weight="700" fill="#1a202c">app.py</text>
+    <text x="210" y="216" fill="#4a5568">entry · navigation · overview</text>
+    <rect x="362" y="160" width="280" height="80" rx="8" fill="#ffffff" stroke="#2B6CB0"/>
+    <text x="502" y="192" font-weight="700" fill="#1a202c">1_Marketplace.py</text>
+    <text x="502" y="216" fill="#4a5568">filters · sort · pagination</text>
+    <rect x="654" y="160" width="280" height="80" rx="8" fill="#ffffff" stroke="#2B6CB0"/>
+    <text x="794" y="192" font-weight="700" fill="#1a202c">2_Product_Detail.py</text>
+    <text x="794" y="216" fill="#4a5568">detail · purchase</text>
+    <rect x="946" y="160" width="280" height="80" rx="8" fill="#ffffff" stroke="#2B6CB0"/>
+    <text x="1086" y="192" font-weight="700" fill="#1a202c">3_Sell_MyProducts.py</text>
+    <text x="1086" y="216" fill="#4a5568">publish · edit · delete</text>
+    <rect x="1238" y="160" width="280" height="80" rx="8" fill="#ffffff" stroke="#2B6CB0"/>
+    <text x="1378" y="192" font-weight="700" fill="#1a202c">4_My_Purchases.py</text>
+    <text x="1378" y="216" fill="#4a5568">purchase history</text>
+  </g>
+  <text x="64" y="284" font-size="14" fill="#4a5568">session state holds the current test account · user identity simulated by sidebar switcher</text>
+
+  <!-- arrow 1 -->
+  <line x1="800" y1="310" x2="800" y2="356" stroke="#1a202c" stroke-width="2.5" marker-end="url(#arrow)"/>
+  <text x="818" y="340" font-size="15" fill="#1a202c">service-layer calls (validated parameters in, structured results out)</text>
+
+  <!-- Business logic layer -->
+  <rect x="40" y="360" width="1520" height="180" rx="14" fill="#E9F7EF" stroke="#2F855A" stroke-width="2"/>
+  <text x="64" y="392" font-size="18" font-weight="700" fill="#2F855A">BUSINESS LOGIC LAYER — services (validation &amp; orchestration, zero SQL)</text>
+  <g font-size="16" text-anchor="middle">
+    <rect x="70"  y="410" width="730" height="90" rx="8" fill="#ffffff" stroke="#2F855A"/>
+    <text x="435" y="442" font-weight="700" fill="#1a202c">product_service.py</text>
+    <text x="435" y="466" fill="#4a5568">form validation · search-parameter assembly · browse orchestration</text>
+    <text x="435" y="488" fill="#4a5568">publish/edit/delete rules · buy orchestration · sold-delete block</text>
+    <rect x="812" y="410" width="718" height="90" rx="8" fill="#ffffff" stroke="#2F855A"/>
+    <text x="1171" y="442" font-weight="700" fill="#1a202c">user_service.py</text>
+    <text x="1171" y="466" fill="#4a5568">current-user context via Streamlit session state</text>
+    <text x="1171" y="488" fill="#4a5568">test-account listing &amp; switching (no auth in scope)</text>
+  </g>
+
+  <!-- arrow 2 -->
+  <line x1="800" y1="540" x2="800" y2="586" stroke="#1a202c" stroke-width="2.5" marker-end="url(#arrow)"/>
+  <text x="818" y="570" font-size="15" fill="#1a202c">repository calls (typed interfaces: search / count / buy / history …)</text>
+
+  <!-- Data access layer -->
+  <rect x="40" y="590" width="1520" height="180" rx="14" fill="#FDF6EC" stroke="#C05621" stroke-width="2"/>
+  <text x="64" y="622" font-size="18" font-weight="700" fill="#C05621">DATA ACCESS LAYER — repositories (all SQL lives here)</text>
+  <g font-size="16" text-anchor="middle">
+    <rect x="70" y="640" width="960" height="90" rx="8" fill="#ffffff" stroke="#C05621"/>
+    <text x="550" y="670" font-weight="700" fill="#1a202c">product_repository.py</text>
+    <text x="550" y="694" fill="#4a5568">search_products · count_products · get_product_detail · get_user_products</text>
+    <text x="550" y="716" fill="#4a5568">create / update / delete_product · buy_product (conditional UPDATE) · get_my_purchases</text>
+    <rect x="1042" y="640" width="250" height="90" rx="8" fill="#ffffff" stroke="#C05621"/>
+    <text x="1167" y="678" font-weight="700" fill="#1a202c">user_repository.py</text>
+    <text x="1167" y="702" fill="#4a5568">read-only user queries</text>
+    <rect x="1304" y="640" width="250" height="90" rx="8" fill="#ffffff" stroke="#C05621"/>
+    <text x="1429" y="678" font-weight="700" fill="#1a202c">category_repository.py</text>
+    <text x="1429" y="702" fill="#4a5568">read-only category queries</text>
+  </g>
+  <text x="64" y="756" font-size="14" fill="#4a5568">parameterized SQL everywhere · ORDER BY from a fixed whitelist · ownership checks in WHERE clauses</text>
+
+  <!-- arrow 3 -->
+  <line x1="800" y1="770" x2="800" y2="816" stroke="#1a202c" stroke-width="2.5" marker-end="url(#arrow)"/>
+  <text x="818" y="800" font-size="15" fill="#1a202c">every connection from one factory</text>
+
+  <!-- Database layer -->
+  <rect x="40" y="820" width="1520" height="200" rx="14" fill="#F3E8FF" stroke="#6B46C1" stroke-width="2"/>
+  <text x="64" y="852" font-size="18" font-weight="700" fill="#6B46C1">DATABASE LAYER — SQLite (campus_market.db)</text>
+  <g font-size="16" text-anchor="middle">
+    <rect x="70" y="870" width="730" height="110" rx="8" fill="#ffffff" stroke="#6B46C1"/>
+    <text x="435" y="900" font-weight="700" fill="#1a202c">database/connection.py — get_connection()</text>
+    <text x="435" y="926" fill="#4a5568">absolute file-based path · PRAGMA foreign_keys = ON per connection</text>
+    <text x="435" y="948" fill="#4a5568">row_factory = sqlite3.Row · single entry point for all modules</text>
+    <rect x="812" y="870" width="718" height="110" rx="8" fill="#ffffff" stroke="#6B46C1"/>
+    <text x="1171" y="900" font-weight="700" fill="#1a202c">campus_market.db — 3 tables · 2 indexes</text>
+    <text x="1171" y="926" fill="#4a5568">users (1,000) · categories (5) · products (10,000)</text>
+    <text x="1171" y="948" fill="#4a5568">idx_products_category_status · idx_products_buyer</text>
+  </g>
+  <text x="64" y="1000" font-size="14" fill="#4a5568">transaction state stored on the product row: buyer_id / status (available | sold) / finished_at — no separate orders table</text>
+
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#1a202c"/>
+    </marker>
+  </defs>
+</svg>

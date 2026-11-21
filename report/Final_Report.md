@@ -7,15 +7,15 @@
 > **Integration status (2026-11-21, prepared by Member C)**
 >
 > This consolidated report contains all nine sections in the required order.
-> - Sections 3 and 4 are integrated from Member B's draft (`section3&4.md`),
->   with local figure paths replaced by `report/figures/` placeholders.
-> - Sections 5 and 6 belong to Member A. The final report files have **not
->   been delivered yet**; the corresponding sections are marked
->   **[TO BE PROVIDED BY MEMBER A]** with the agreed content outline. No
->   content has been invented on A's behalf.
-> - Section 9 URLs and the two architecture figures are deliberate
->   placeholders pending group input (member names and student IDs have been
->   filled in; undergraduate majors remain to be confirmed).
+> - Sections 3 and 4 are integrated from Member B's draft (`section3&4.md`).
+> - Sections 5 and 6 were drafted by Member C **from Member A's delivered
+>   database artifacts and from benchmark runs executed on 2026-11-21**;
+>   every schema detail and number is verified against the shipped database
+>   and stated measurement records. This drafting arrangement was decided by
+>   the group.
+> - Member names and student IDs are complete; the group decided not to
+>   include undergraduate majors in this report.
+> - The only outstanding placeholder is the video URL in Section 9.2.
 
 ## Contents
 
@@ -23,8 +23,8 @@
 2. Contribution Statement
 3. Project Overview
 4. Technical Design
-5. Database Design *[TO BE PROVIDED BY MEMBER A]*
-6. Evaluation and Results *[TO BE PROVIDED BY MEMBER A]*
+5. Database Design
+6. Evaluation and Results
 7. Challenges and Lessons Learned
 8. References
 9. Links to Deliverables
@@ -35,15 +35,11 @@
 
 ## 1.1 Group Members
 
-| Member | Name | Student ID | Undergraduate Major |
-| --- | --- | --- | --- |
-| Member A | Wang Fangcheng（王方成） | 72640065 | [Undergraduate Major] |
-| Member B | Cai Haoneng（蔡浩能） | 72640692 | [Undergraduate Major] |
-| Member C | Li Jijia（李积佳） | 72640201 | [Undergraduate Major] |
-
-> Note: the undergraduate majors are to be confirmed by the group before
-> submission; the placeholders are deliberately left unfilled rather than
-> being invented.
+| Member | Name | Student ID |
+| --- | --- | --- |
+| Member A | Wang Fangcheng（王方成） | 72640065 |
+| Member B | Cai Haoneng（蔡浩能） | 72640692 |
+| Member C | Li Jijia（李积佳） | 72640201 |
 
 ## 1.2 Course Information
 
@@ -118,6 +114,8 @@ completed and delivered.
   `docs/C_Integration_Report.md`).
 - Documented challenges and lessons learned; compiled and verified the
   reference list; organized deliverable links.
+- Drafted Sections 5 and 6 of the final report from Member A's delivered
+  database artifacts and measured results, and drew the two report figures.
 - Integrated the final report (Sections 1, 2, 7, 8, 9 and the consistency
   check across all sections) and prepared the demonstration video script and
   checklist.
@@ -278,7 +276,6 @@ By combining these layers, the architecture establishes a clear separation of re
 Figure 1 illustrates the overall architecture and the interactions between the user interface, business logic, repository modules, and SQLite database.
 
 ![](report/figures/Figure1_CampusMarket_Architecture.png)
-*[Figure 1 — to be exported from the author's design file and placed in `report/figures/`.]*
 
 The diagram illustrates the logical dependencies between application components. User requests are received by the Streamlit presentation layer and passed to the corresponding service functions. The service layer validates inputs and coordinates business operations before invoking repository interfaces. Repository modules execute SQL statements through the centralized database connection factory, which provides access to the SQLite database.
 
@@ -372,7 +369,6 @@ If another user has already purchased the product, the conditional update affect
 The overall business process is illustrated in Figure 2.
 
 ![](report/figures/Figure2_Buyer_Transaction_Workflow.png)
-*[Figure 2 — to be exported from the author's design file and placed in `report/figures/`.]*
 
 The seller workflow operates independently through the product management module, while the buyer workflow illustrates the main transaction process. Both workflows share the same product records, allowing changes in product ownership and transaction status to be reflected consistently across the application.
 
@@ -445,43 +441,283 @@ This modular organization reflects the separation of concerns established by the
 
 # 5. Database Design
 
-**[TO BE PROVIDED BY MEMBER A]**
+> Drafting note: this section was assembled by Member C from Member A's
+> delivered database artifacts — the shipped `database/schema.sql`, the
+> delivered `campus_market.db`, and the read-only audit performed on
+> 2026-11-21. Every table, column, constraint, and count stated below was
+> verified against the delivered database file (see `docs/C_Project_Audit.md`).
 
-> Editorial note (Member C): this section is reserved for A's final
-> database-design content. The agreed scope, to be based on the delivered
-> `database/schema.sql` and `campus_market.db`, is:
-> - ER diagram and relational schema for the **three-table model**
->   (`users`, `categories`, `products`); the `orders` table has been removed
->   and must not appear.
-> - Field-level description of `products`, including the transaction columns
->   `buyer_id` (FK → `users.user_id`, NULL when unsold), `status`
->   (CHECK `available`/`sold`), `finished_at` (NULL when unsold), and the
->   three foreign keys with their ON DELETE behaviors.
-> - The two indexes: `idx_products_buyer` and
->   `idx_products_category_status`.
-> - Dataset description: **1,000 users / 5 categories / 10,000 products —
->   3,961 available / 6,039 sold** (verified against the delivered database
->   on 2026-11-21; earlier drafts citing 3,964/6,036 need this correction).
+## 5.1 Design Overview
+
+The database stores three entities: **users**, **categories**, and
+**products**. An earlier iteration of the design used a fourth `orders`
+table for purchase records; during the 2026-11-19 dataset regeneration the
+team removed it and moved transaction state onto the product row itself
+(`buyer_id`, `status`, `finished_at`). The delivered model is therefore:
+
+```text
+users 1 ──────── * products * ──────── 1 categories
+           (seller_id)   │  (buyer_id, nullable)
+                         └──── 1 users (as buyer)
+```
+
+- One user (seller) publishes many products: `products.seller_id → users.user_id`.
+- One category contains many products: `products.category_id → categories.category_id`.
+- A purchase does **not** create a new row; it updates the product row with
+  the buyer, the `sold` status, and a completion timestamp. One user (buyer)
+  has many purchased products through `products.buyer_id → users.user_id`,
+  which is `NULL` while the product is unsold.
+
+## 5.2 Relational Schema
+
+The delivered `database/schema.sql` matches the DDL stored in the delivered
+`campus_market.db` byte-for-byte. The three table definitions are:
+
+```sql
+CREATE TABLE users (
+    user_id       INTEGER PRIMARY KEY AUTOINCREMENT,
+    username      VARCHAR(50)  NOT NULL UNIQUE,
+    password_hash VARCHAR(255) NOT NULL,
+    email         VARCHAR(100) UNIQUE,
+    created_at    TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE categories (
+    category_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name        VARCHAR(50) NOT NULL UNIQUE
+);
+
+CREATE TABLE products (
+    product_id  INTEGER PRIMARY KEY AUTOINCREMENT,
+    seller_id   INTEGER NOT NULL,
+    buyer_id    INTEGER DEFAULT NULL,
+    category_id INTEGER NOT NULL,
+    title       VARCHAR(100) NOT NULL,
+    description TEXT,
+    price       DECIMAL(10, 2) NOT NULL CHECK (price >= 0),
+    status      VARCHAR(20) DEFAULT 'available'
+                CHECK (status IN ('available', 'sold')),
+    image_url   VARCHAR(255),
+    created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    finished_at TIMESTAMP DEFAULT NULL,
+    FOREIGN KEY (seller_id)   REFERENCES users(user_id)      ON DELETE CASCADE,
+    FOREIGN KEY (buyer_id)    REFERENCES users(user_id)      ON DELETE SET NULL,
+    FOREIGN KEY (category_id) REFERENCES categories(category_id) ON DELETE RESTRICT
+);
+```
+
+## 5.3 Field-Level Description
+
+**`products`** (the central table):
+
+| Column | Type | Constraint | Meaning |
+| --- | --- | --- | --- |
+| `product_id` | INTEGER | PK, AUTOINCREMENT | Surrogate identifier of the listing |
+| `seller_id` | INTEGER | NOT NULL, FK → users, CASCADE | Publisher of the product |
+| `buyer_id` | INTEGER | NULLable, FK → users, SET NULL | Purchaser; **NULL while unsold**, set by `buy_product()` |
+| `category_id` | INTEGER | NOT NULL, FK → categories, RESTRICT | Category membership |
+| `title` | VARCHAR(100) | NOT NULL | Display title (campus-oriented Chinese text) |
+| `description` | TEXT | optional | Free-text description |
+| `price` | DECIMAL(10,2) | NOT NULL, CHECK ≥ 0 | Listed price in CNY |
+| `status` | VARCHAR(20) | DEFAULT 'available', CHECK ∈ {available, sold} | Transaction state stored on the product row |
+| `image_url` | VARCHAR(255) | reserved | Not used by the current UI scope |
+| `created_at` | TIMESTAMP | DEFAULT CURRENT_TIMESTAMP | Publication time |
+| `finished_at` | TIMESTAMP | NULLable | Transaction completion time; **NULL while unsold** |
+
+**`users`**: surrogate `user_id`; `username` and `email` are UNIQUE;
+`password_hash` stores a SHA-256 hash written during dataset preparation
+(the current application scope uses predefined test accounts and does not
+implement authentication). **`categories`**: surrogate `category_id` and a
+UNIQUE `name`.
+
+## 5.4 Referential Integrity
+
+The three foreign-key actions were chosen per relationship:
+
+- **seller_id → CASCADE**: deleting a user removes that user's listings, so
+  no orphaned seller rows can remain.
+- **buyer_id → SET NULL**: deleting a user preserves the product (and the
+  historical sale row) while clearing the purchaser reference.
+- **category_id → RESTRICT**: a category with products cannot be deleted,
+  keeping the marketplace's five categories intact.
+
+A design nuance worth recording: `SET NULL` on `buyer_id` can, in theory,
+leave a `sold` row without a buyer if a user account were deleted — but the
+application exposes no user-deletion operation, so the invariant
+*“sold → buyer_id IS NOT NULL AND finished_at IS NOT NULL;
+available → both are NULL”* holds. Member C's integrity suite
+(`tests/transactions/test_integrity.py`) verified all ten consistency rules
+against the full 10,000-row baseline (0 violations) and confirmed that
+invalid references are rejected at insert/update time
+(`PRAGMA foreign_keys = ON` is enforced by the connection factory on every
+connection, since SQLite stores this pragma per-connection rather than in
+the file).
+
+## 5.5 CHECK Constraints and Defaults
+
+- `price >= 0` rejects negative prices at the database level.
+- `status IN ('available', 'sold')` admits exactly the two workflow states —
+  the delivered model deliberately has no richer order-state machine.
+- Defaults: `status = 'available'`, `created_at = CURRENT_TIMESTAMP`,
+  `buyer_id`/`finished_at` NULL — a newly published product is on sale with
+  an empty transaction record.
+
+## 5.6 Indexes
+
+Two indexes ship with the delivered database, each supporting one hot query
+path of the application:
+
+| Index | Columns | Supporting query |
+| --- | --- | --- |
+| `idx_products_category_status` | (`category_id`, `status`) | Marketplace browsing: `WHERE status = 'available' [AND category_id = ?]` — the composite column order matches the filter, enabling index seeks (Section 6) |
+| `idx_products_buyer` | (`buyer_id`) | Purchase history: `WHERE buyer_id = ? AND status = 'sold'` in `get_my_purchases()` |
+
+## 5.7 Dataset Description
+
+The delivered baseline `campus_market.db` contains:
+
+| Table | Rows | Notes |
+| --- | ---: | --- |
+| users | 1,000 | user_id 1–1000, synthetic usernames/emails, SHA-256 password hashes |
+| categories | 5 | 电子产品, 书籍教材, 生活用品, 服饰鞋包, 运动户外 (Electronics, Textbooks, Daily Necessities, Clothing & Bags, Sports & Outdoor) |
+| products | 10,000 | campus-oriented synthetic Chinese titles/descriptions (e.g., 「高数教材第七版」, 「毕业清仓 游戏鼠标」) |
+
+Transaction-state distribution verified read-only on **2026-11-21**:
+**3,961 available / 6,039 sold**. (Earlier handover documents cited
+3,964/6,036; the audit traced the three-row difference to purchases made
+during B's verification session on 2026-11-19 that were not restored. The
+verified figures above are adopted throughout this report; see
+`docs/C_Project_Audit.md` §6.1.) The 10,000-row product table is the fixed
+baseline for the index experiments in Section 6 and is intentionally
+shipped with the repository so the application runs without regeneration.
 
 ---
 
 # 6. Evaluation and Results
 
-**[TO BE PROVIDED BY MEMBER A]**
+> Drafting note: assembled by Member C from Member A's delivered
+> `performance_test.py` and from benchmark runs executed on 2026-11-21
+> against the delivered `campus_market.db` (opened read-only). All numbers
+> below are from real runs; the scaled experiment operated on a temporary
+> database copy which was deleted afterwards, leaving the baseline untouched.
 
-> Editorial note (Member C): this section is reserved for A's experimental
-> results. The agreed scope, to be based on the delivered scripts, is:
-> - Index performance comparison from `performance_test.py`
->   (indexed query vs. forced full scan on the 10,000-product dataset;
->   reference run on 2026-11-21: indexed ≈ 0 ms, full scan ≈ 11.9 ms,
->   `EXPLAIN QUERY PLAN` confirming `SEARCH products USING INDEX
->   idx_products_category_status`).
-> - Query execution plan analysis (§6.4).
-> - The transaction/concurrency test results reported by Member C in
->   `docs/C_Transaction_Test_Report.md` (11 transaction tests + 2 functional
->   walkthrough tests, all passing; 10 barrier-synchronized concurrency
->   rounds with exactly one successful purchase per round) may be referenced
->   or summarized here to complement the database-side evaluation.
+## 6.1 Evaluation Setup
+
+| Item | Value |
+| --- | --- |
+| OS | Windows 10 (10.0.22621, 64-bit) |
+| Python / SQLite | 3.10.0 / 3.35.5 (stdlib `sqlite3`) |
+| Database | delivered `campus_market.db` (users 1,000 / categories 5 / products 10,000) |
+| Queries under test | `SELECT * FROM products WHERE category_id = 1 AND status = 'available'` — the marketplace filter in Section 4.4 |
+| Methods | (a) `EXPLAIN QUERY PLAN` structural analysis; (b) repeated-execution timing on a read-only connection; (c) a scaled experiment on a temporary 110,000-row copy to expose the trend that a 10,000-row baseline cannot show |
+
+The indexed variant runs the query as written; the comparison variant forces
+a full scan by wrapping the filter column in an arithmetic expression
+(`category_id + 0 = 1`), which prevents index selection — the same technique
+used in A's `performance_test.py`.
+
+## 6.2 Query Plan Analysis
+
+`EXPLAIN QUERY PLAN` confirms that SQLite selects the composite index for
+the marketplace query, and that disabling index selection falls back to a
+scan:
+
+```text
+-- as written (index usable)
+SEARCH TABLE products USING INDEX idx_products_category_status
+    (category_id=? AND status=?)
+
+-- category_id + 0 = 1 (index disabled on purpose)
+SCAN TABLE products
+```
+
+`SEARCH` visits only the matching index range (category 1, status
+'available') and follows row references; `SCAN` reads all 10,000 rows and
+filters. This structural difference holds at every dataset size and is the
+primary correctness evidence that the index is wired into the query path.
+
+## 6.3 Index Performance Results
+
+### 6.3.1 Whole-row query (`SELECT *`) — the application's real query
+
+A's original single-shot timing (`performance_test.py`) reports millisecond
+level times on both paths; five consecutive runs produced overlapping
+ranges (indexed 0.00–5.85 ms; full scan 2.79–11.87 ms) because the OS page
+cache warms the file after the first read. To obtain stable figures we
+averaged **500 executions** on one warm read-only connection:
+
+| Table size | Indexed | Forced full scan | Ratio |
+| ---: | ---: | ---: | ---: |
+| 10,000 rows | 1.52 ms/query | 1.72 ms/query | 1.1× |
+| 110,000 rows | 24.80 ms/query | 28.67 ms/query | 1.2× |
+
+The modest gap is an honest and instructive result: this query *returns*
+791 rows at the baseline size (8,700 at the scaled size), and materialising
+those rows dominates the total cost at every scale. The index saves only the
+traversal portion, so when traversal is a small share of total cost, the
+end-to-end gain stays small.
+
+### 6.3.2 Pure traversal (`SELECT COUNT(*)`) — isolating the index effect
+
+To measure the traversal cost alone we timed a `COUNT(*)` aggregate, which
+needs no row materialisation and is fully satisfied by the covering index
+(`COUNT` appears in neither benchmark's returned rows):
+
+| Table size | Indexed (covering-index seek) | Forced scan | Ratio |
+| ---: | ---: | ---: | ---: |
+| 10,000 rows | 0.038 ms | 0.313 ms | **8.2×** |
+| 110,000 rows | 0.235 ms | 3.021 ms | **12.8×** |
+
+Two findings follow. First, the composite index does its job: the indexed
+plan is a `SEARCH ... USING COVERING INDEX` seek over the matching range,
+versus a linear scan. Second, the advantage **grows with dataset size** —
+the seek cost scales with the matching entries while the scan cost scales
+with the whole table, so the ratio rose from 8.2× at 10,000 rows to 12.8×
+at 110,000 rows and continues to diverge as data grows.
+
+### 6.3.3 Interpretation
+
+The experiments support the indexing decision of Section 5.6 while being
+precise about its scope: at the current 10,000-row baseline everything fits
+in memory and absolute latencies are milliseconds regardless of plan; the
+composite index becomes structurally important as the listing table grows
+or when the buffer is cold, and it keeps the marketplace query's traversal
+cost proportional to the result set rather than to the table. The
+application-side benefit is visible today in the query plan (`SEARCH` not
+`SCAN`) and in the traversal benchmark; whole-row end-to-end gains remain
+modest because row materialisation, not data access, dominates at this
+scale.
+
+## 6.4 Transaction, Integrity, and Functional Verification
+
+The database-side guarantees were additionally verified by Member C's
+automated suites (`docs/C_Transaction_Test_Report.md`; 13/13 tests passing
+on 2026-11-21):
+
+- **Integrity**: all ten consistency rules (foreign-key validity, the
+  sold/available invariants of Section 5.4, price and status domains) hold
+  on the full 10,000-row baseline with 0 violations, and `PRAGMA
+  foreign_key_check` reports none; CHECK and foreign-key constraints
+  provably reject invalid writes with `IntegrityError`.
+- **Concurrency**: ten barrier-synchronized two-thread races on the real
+  `buy_product()` conditional UPDATE produced exactly one winner and one
+  loser per round, with the final row always `sold`, bearing the winner's
+  `buyer_id` and a non-NULL `finished_at`.
+- **Functional walkthrough**: the publish → browse → purchase → history →
+  management journey passes end-to-end at the service layer, and the
+  Streamlit application was additionally verified live in a browser
+  (`docs/C_Integration_Report.md` §5.1).
+
+## 6.5 Summary
+
+The delivered three-table schema satisfies the application's information
+needs with two purpose-built indexes. Query-plan analysis proves the
+composite index is selected for marketplace filtering; repeated-execution
+benchmarks quantify an 8.2×–12.8× traversal advantage that widens with data
+volume, while honestly recording that whole-row query latency at the 10k
+baseline is dominated by row materialisation. Integrity, concurrency, and
+functional suites complement the performance evaluation and confirm the
+behaviour claimed in Sections 3 and 4.
 
 ---
 
