@@ -30,6 +30,7 @@ streamlit run app.py
 
 - 数据库文件 `database/campus_market.db` 已随仓库提供，无需初始化或补账号
 - 可选：`python check_interfaces.py` 执行只读联调自检
+- 测试：`python -m unittest discover -s tests -p "test_*.py"` 执行全部 13 项自动化测试
 - 当前数据：1,000 个用户、5 个分类、10,000 件商品（含在售与已售）
 
 ## 项目结构（Structure）
@@ -62,40 +63,15 @@ CampusMarket/
 │   ├── 注意事项.docx            A 同学早期交接说明（已过时）
 │   ├── 修改说明_20261119.docx   队友 2026-11-19 更新说明
 │   └── B_交接说明.docx          B 同学开发交接说明（v2）
+├── tests/
+│   ├── transactions/            购买事务语义与多线程防超卖（隔离副本运行）
+│   └── functional/              service 层端到端用户旅程
+├── report/                      最终报告与分节内容、设计图
+├── presentation/                演示视频、字幕、讲稿与演示清单
 ├── performance_test.py          索引性能实验脚本
 ├── test_repo.py                 数据访问自测脚本
 ├── check_interfaces.py          联调自检脚本
-├── tests/                       C 增量：事务/并发/完整性/功能走查测试
-│   ├── transactions/            购买事务语义与多线程防超卖（隔离副本运行）
-│   └── functional/              service 层端到端用户旅程
-├── report/                      C 增量：报告 Section 1/2/7/8/9 与 Final_Report
-├── presentation/                C 增量：视频讲稿与演示清单
 ├── requirements.txt
 ├── .gitignore
 └── README.md
 ```
-
----
-
-## C 的交付说明（Member C 增补，2026-11-21）
-
-A、B 的全部代码与数据库保持原样；C 的工作为纯增量交付：
-
-| 交付物 | 位置 |
-| --- | --- |
-| 项目审计报告 | `docs/C_Project_Audit.md` |
-| 事务与并发测试（13 项用例，隔离副本运行，基准库零写入） | `tests/transactions/`、`tests/functional/` |
-| 测试结果报告（真实运行数据） | `docs/C_Transaction_Test_Report.md` |
-| 系统整合与验收报告 | `docs/C_Integration_Report.md` |
-| 报告 Section 1 / 2 / 7 / 8 / 9 与全文统稿 | `report/` |
-| 视频讲稿与演示操作清单 | `presentation/` |
-
-测试运行方式（工程根目录）：
-
-```bash
-python -m unittest discover -s tests -p "test_*.py" -v   # 全部 13 项
-python check_interfaces.py                               # B 的只读自检
-```
-
-已知口径说明：基准库实测 available/sold = 3,961/6,039（合计与文档一致），
-差异溯源见 `docs/C_Project_Audit.md` §6.1；最终报告采用实测值。
